@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'gradient_painter.dart';
+import 'dart:math' as math;
 
 const kScaleFactor = 1.1;
 const kDisabledButtonTextColor = Color(0x80FFFFFF);
@@ -26,7 +25,6 @@ class MyButton extends StatefulWidget {
     @required this.onPressed,
     this.style = MyButtonStyle.primary,
     this.selected = false,
-    this.rotatedGradient = false,
   }) : super(key: key);
 
   final String title;
@@ -35,25 +33,36 @@ class MyButton extends StatefulWidget {
   final VoidCallback onPressed;
   final MyButtonStyle style;
   final bool selected;
-  final bool rotatedGradient;
 
   @override
   _MyButtonState createState() => _MyButtonState();
 }
+
+const kGradientAngleDeg = 45.0;
+const kGradientAngleRadians = kGradientAngleDeg * (math.pi / 180.0);
 
 class _MyButtonState extends State<MyButton> {
   bool _pressed = false;
 
   @override
   Widget build(BuildContext context) {
+    const LinearGradient gradient = LinearGradient(
+      colors: <Color>[
+        Color(0xFF0083cb),
+        Color(0xFF424cc4),
+        Color(0xFF8314bd),
+      ],
+      transform: GradientRotation(kGradientAngleRadians),
+    );
+
     return ClipPath(
       clipper: ShapeBorderClipper(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0 * kScaleFactor),
         ),
       ),
-      child: CustomPaint(
-        painter: _painter(),
+      child: Container(
+        decoration: BoxDecoration(gradient: gradient),
         child: Container(
           margin: const EdgeInsets.all(1.5),
           decoration: BoxDecoration(
@@ -87,19 +96,6 @@ class _MyButtonState extends State<MyButton> {
 
   Color _buttonTextColor() {
     return Colors.white;
-  }
-
-  CustomPainter _painter() {
-    switch (widget.style) {
-      case MyButtonStyle.primary:
-        return GradientPainter(rotated: widget.rotatedGradient);
-      case MyButtonStyle.secondary:
-        return _pressed
-            ? const SolidPainter(kYellow)
-            : GradientPainter(rotated: widget.rotatedGradient);
-      default:
-        return null;
-    }
   }
 
   Color _buttonBackgroundColor() {

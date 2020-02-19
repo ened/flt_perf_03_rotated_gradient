@@ -25,20 +25,12 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  bool _rotated = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: RaisedButton(
-          child: Text(_rotated ? 'Disable Rotation' : 'Enable Rotation'),
-          onPressed: () {
-            setState(() {
-              _rotated = !_rotated;
-            });
-          },
-        ),
+        title: Text('GradientRotation')
       ),
       backgroundColor: Color(0xFF001228),
       body: ListView(
@@ -49,7 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Center(
               child: MyButton(
                 title: 'Button: $index',
-                rotatedGradient: _rotated,
                 style: index % 2 == 0
                     ? MyButtonStyle.primary
                     : MyButtonStyle.secondary,
